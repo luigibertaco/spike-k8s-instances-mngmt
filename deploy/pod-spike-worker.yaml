@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spike-worker
+  labels:
+    app: worker
+spec:
+  containers:
+  - name: spike-worker
+    image: instances-management_worker
+    imagePullPolicy: IfNotPresent
