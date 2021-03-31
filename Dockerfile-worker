@@ -1,0 +1,20 @@
+FROM qctrl/ci-images:python-3.8-base
+
+USER root
+RUN apt-get -qy update && apt-get -qy install curl
+
+RUN pip install --upgrade pip==19.3.1 setuptools==45.0.0
+
+COPY . /install
+WORKDIR /install
+
+ENV PATH=/root/.poetry/bin:$PATH
+
+# Install Poetry. We also need to do a hack to upgrade the virtual environment it creates
+# Required because of the firebase-admin requirement
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python /dev/stdin --version 1.1.4 && \
+    poetry run pip install --upgrade pip==20.2.4 setuptools==45.0.0 && \
+    poetry install --no-interaction --no-ansi
+
+WORKDIR /install
+ENTRYPOINT ["poetry", "run", "/install/docker-entrypoint-worker.sh"]
