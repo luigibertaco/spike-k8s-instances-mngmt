@@ -36,3 +36,5 @@ deploy-worker:
 
 apply-cluster-roles:
 	kubectl apply -f deploy/roles.yaml
+
+setup: apply-cluster-roles build-api register-api build-worker register-worker deploy-api deploy-broker
