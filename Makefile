@@ -31,4 +31,8 @@ delete-worker:
 	kubectl delete pod spike-worker
 
 deploy-worker:
-	kubectl apply -f deploy/pod-spike-worker.yaml
+	#kubectl apply -f deploy/pod-spike-worker.yaml
+	kubectl run spike-worker --image=instances-management_worker --restart=Always --image-pull-policy=IfNotPresent
+
+apply-cluster-roles:
+	kubectl apply -f deploy/roles.yaml
