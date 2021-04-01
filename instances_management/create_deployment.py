@@ -6,25 +6,30 @@ from kubernetes import client, config
 
 WORKER_BASE_NAME = "spike-worker-"
 
+TIERS = {
+    0: {
+        "requests": {"cpu": "10m", "memory": "10Mi"},
+        "limits": {"cpu": "10m", "memory": "10Mi"},
+    },
+    1: {
+        "requests": {"cpu": "110m", "memory": "210Mi"},
+        "limits": {"cpu": "510m", "memory": "510Mi"},
+    },
+    2: {
+        "requests": {"cpu": "120m", "memory": "220Mi"},
+        "limits": {"cpu": "520m", "memory": "520Mi"},
+    },
+}
+
 
 def create_deployment_object(name, tier: int = 1):
     name = f"{WORKER_BASE_NAME}{name}"
-    tiers = {
-        1: {
-            "requests": {"cpu": "110m", "memory": "210Mi"},
-            "limits": {"cpu": "510m", "memory": "510Mi"},
-        },
-        2: {
-            "requests": {"cpu": "120m", "memory": "220Mi"},
-            "limits": {"cpu": "520m", "memory": "520Mi"},
-        },
-    }
     # Configureate Pod template container
     container = client.V1Container(
         name=name,
         image="instances-management_worker",
         ports=[client.V1ContainerPort(container_port=80)],
-        resources=client.V1ResourceRequirements(**tiers[tier]),
+        resources=client.V1ResourceRequirements(**TIERS[tier]),
         image_pull_policy="IfNotPresent",
         env=[
             client.V1EnvVar(name="WORKER_NAME", value=name),

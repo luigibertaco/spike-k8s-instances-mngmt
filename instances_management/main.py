@@ -13,6 +13,7 @@ from .create_deployment import (
     create_deployment_object,
     delete_deployment,
     update_deployment,
+    TIERS,
 )
 from .max_prime import max_prime_factors
 
@@ -68,9 +69,8 @@ def create_worker(name: str):
 
 @app.get("/pod/new/{name}/{tier}")
 def create_worker_tier(name: str, tier: int):
-    tiers = [1, 2]
-    if tier not in tiers:
-        return {"error": f"tier {tier} doesn't exist, should be one of {tiers}"}
+    if tier not in TIERS:
+        return {"error": f"tier {tier} doesn't exist, should be one of {TIERS}"}
 
     deployment_object = create_deployment_object(name, tier)
     create_deployment(deployment_object)
@@ -79,9 +79,8 @@ def create_worker_tier(name: str, tier: int):
 
 @app.get("/pod/update/{name}/{tier}")
 def update_worker(name: str, tier: int):
-    tiers = [1, 2]
-    if tier not in tiers:
-        return {"error": f"tier {tier} doesn't exist, should be one of {tiers}"}
+    if tier not in TIERS:
+        return {"error": f"tier {tier} doesn't exist, should be one of {TIERS}"}
 
     deployment_object = create_deployment_object(name, tier)
     update_deployment(deployment_object)
@@ -100,7 +99,7 @@ def list_pods():
 
         v1 = client.CoreV1Api()
         print("Listing pods with their IPs:")
-        ret = v1.list_pod_for_all_namespaces(watch=False)
+        ret = v1.list_namespaced_pod(namespace="default", watch=False)
         pods = []
         for i in ret.items:
             pods.append(
