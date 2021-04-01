@@ -25,15 +25,6 @@ build-worker:
 register-worker:
 	kind load docker-image instances-management_worker --name kind
 
-redeploy-worker: delete-worker deploy-worker
-
-delete-worker:
-	kubectl delete pod spike-worker
-
-deploy-worker:
-	#kubectl apply -f deploy/pod-spike-worker.yaml
-	kubectl run spike-worker --image=instances-management_worker --restart=Always --image-pull-policy=IfNotPresent
-
 apply-cluster-roles:
 	kubectl apply -f deploy/roles.yaml
 
