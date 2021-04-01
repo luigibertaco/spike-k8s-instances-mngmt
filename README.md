@@ -1,7 +1,18 @@
 # Dependencies
 
+Kubernetes cli for mac
+```
+brew install kubectl
+```
+
+Small kubernetes engine that runs inside docker
 ```
 brew install kind
+```
+
+optional - kubernetes management tool, good for visualization, logs etc
+```
+brew install k9s
 ```
 
 # Setup
