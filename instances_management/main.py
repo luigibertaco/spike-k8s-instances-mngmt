@@ -13,6 +13,7 @@ from .create_deployment import (
     delete_deployment,
     update_deployment,
     TIERS,
+    WORKER_BASE_NAME,
 )
 
 app = FastAPI()
@@ -25,6 +26,14 @@ def read_root():
     task = add.delay(randint(1, 100), randint(1, 100))
     executed_tasks.append(task)
     return {"Hello": "World", "task": task.id}
+
+
+@app.get("/tasks/new/{worker_name}")
+def create_task_on_worker(worker_name: str):
+    worker_name = WORKER_BASE_NAME + worker_name
+    task = add.apply_async(args=(3, 4), queue=worker_name)
+    executed_tasks.append(task)
+    return {"queue": worker_name, "task": task.id}
 
 
 @app.get("/pods")
