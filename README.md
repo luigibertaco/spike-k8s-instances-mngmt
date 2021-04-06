@@ -23,7 +23,7 @@ To simplify the configuration, the project folder must be called
 from the automated make commands.
 
 ```
-git clone https://github.com/luigibertaco/qctrl-spike-k8s-instances-mngmt.git instances-management
+git clone https://github.com/luigibertaco/spike-k8s-instances-mngmt.git instances-management
 cd instances-management
 kind create cluster --config deploy/cluster.yaml
 make setup
