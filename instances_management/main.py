@@ -1,6 +1,5 @@
 import logging
-import time
-from typing import Optional
+from random import randint
 
 from celery.result import AsyncResult
 from fastapi import FastAPI
@@ -15,7 +14,6 @@ from .create_deployment import (
     update_deployment,
     TIERS,
 )
-from .max_prime import max_prime_factors
 
 app = FastAPI()
 
@@ -24,7 +22,7 @@ executed_tasks = []
 
 @app.get("/hello")
 def read_root():
-    task = add.delay(3, 4)
+    task = add.delay(randint(1, 100), randint(1, 100))
     executed_tasks.append(task)
     return {"Hello": "World", "task": task.id}
 
@@ -46,18 +44,6 @@ def read_tasks():
 def get_task_result(task_id: str):
     task = AsyncResult(task_id, app=celery_app)
     return {"task": task.id, "status": task.status, "result": task.result}
-
-
-@app.get("/items/{number}")
-def read_item(number: int, queue: Optional[str] = None):
-    start_time = time.perf_counter()
-    max_prime = max_prime_factors(number)
-    return {
-        "number": number,
-        "max_prime_factors": max_prime,
-        "queue": queue,
-        "time_calculating": time.perf_counter() - start_time,
-    }
 
 
 @app.get("/pod/new/{name}")
