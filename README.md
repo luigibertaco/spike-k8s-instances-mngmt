@@ -33,14 +33,16 @@ make setup
 
 - http://localhost/tasks
   - shows tasks history
-- http://localhost/hello
-  - creates a task (can just refresh several times to create several tasks)
 - http://localhost/pods
   - lists all pods on the cluster
 - http://localhost/pod/new/team-a
   - creates a deployment for team-a worker (tier 1 - 1 replica)
 - http://localhost/pod/new/team-b/2
   - creates a deployment for team-b worker (tier 2 - 2 replicas)
+- http://localhost/tasks/new/team-a
+  - creates a task to be processed by team-a's workers
+- http://localhost/tasks/new/team-b
+  - creates a task to be processed by team-b's workers
 - http://localhost/pod/update/team-b/1
   - updates team-b to tear-1 (1 replica)
 - http://localhost/pod/delete/team-a
